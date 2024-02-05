@@ -1,6 +1,8 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.google.devtools.ksp").version("1.9.22-1.0.17")
+
 }
 
 android {
@@ -56,4 +58,8 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.bundles.compose)
+    implementation(libs.bundles.network)
+    implementation(libs.bundles.moshi)
+    implementation(libs.bundles.koin)
+    ksp(libs.moshi.codegen)
 }
