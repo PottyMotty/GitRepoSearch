@@ -1,6 +1,7 @@
 package com.pottymotty.gitreposearch
 
 import android.app.Application
+import com.pottymotty.gitreposearch.di.moshiModule
 import com.pottymotty.gitreposearch.di.networkModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -17,7 +18,8 @@ class GitRepoSearchApplication : Application() {
             androidContext(this@GitRepoSearchApplication)
             modules(
                 listOf(
-                    networkModule
+                    networkModule,
+                    moshiModule
                 )
             )
         }

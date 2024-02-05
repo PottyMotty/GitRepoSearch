@@ -8,6 +8,8 @@ plugins {
 android {
     namespace = "com.pottymotty.gitreposearch"
     compileSdk = 34
+    buildFeatures.buildConfig = true
+
 
     defaultConfig {
         applicationId = "com.pottymotty.gitreposearch"
@@ -29,6 +31,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            this.buildConfigField("String","BASE_API_URL","\"https://api.github.com/\"")
         }
     }
     compileOptions {
