@@ -3,7 +3,7 @@ package com.pottymotty.gitreposearch.di
 import com.pottymotty.gitreposearch.BuildConfig
 import com.pottymotty.gitreposearch.data.api.api_services.GithubApiService
 import com.pottymotty.gitreposearch.data.api.call_response.NetworkResponseAdapterFactory
-import com.pottymotty.gitreposearch.data.api.interceptors.GithubVersionInterceptor
+import com.pottymotty.gitreposearch.data.api.interceptors.DefaultHeadersInterceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
@@ -12,7 +12,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 
 val networkModule = module {
     single {
-        GithubVersionInterceptor()
+        DefaultHeadersInterceptor()
     }
     single{
         OkHttpClient.Builder().apply {
@@ -20,7 +20,7 @@ val networkModule = module {
                 HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.BODY
             })
-            addInterceptor(get<GithubVersionInterceptor>())
+            addInterceptor(get<DefaultHeadersInterceptor>())
         }.build()
     }
     single {
