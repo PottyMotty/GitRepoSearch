@@ -22,6 +22,8 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+        this.buildConfigField("String","BASE_API_URL","\"https://api.github.com/\"")
+        this.buildConfigField("String","GITHUB_API_VERSION","\"2022-11-28\"")
     }
 
     buildTypes {
@@ -31,8 +33,8 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            this.buildConfigField("String","BASE_API_URL","\"https://api.github.com/\"")
         }
+
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
