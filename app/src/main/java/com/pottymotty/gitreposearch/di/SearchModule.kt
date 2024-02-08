@@ -9,7 +9,8 @@ import org.koin.dsl.module
 val searchModule = module {
     single<RepoSearchRepository> {
         RepoSearchRepositoryImpl(
-            networkDataSource = get()
+            networkDataSource = get(),
+            searchResultDao = get(),
         )
     }
     viewModel {

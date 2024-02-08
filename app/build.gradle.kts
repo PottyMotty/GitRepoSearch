@@ -67,6 +67,8 @@ dependencies {
     implementation(libs.bundles.moshi)
     implementation(libs.bundles.koin)
     implementation(libs.timber)
-
+    implementation(libs.room)
+    implementation(libs.room.extensions)
     ksp(libs.moshi.codegen)
+    ksp(libs.room.compiler)
 }

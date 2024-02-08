@@ -1,6 +1,7 @@
 package com.pottymotty.gitreposearch
 
 import android.app.Application
+import com.pottymotty.gitreposearch.di.databaseModule
 import com.pottymotty.gitreposearch.di.moshiModule
 import com.pottymotty.gitreposearch.di.networkModule
 import com.pottymotty.gitreposearch.di.searchModule
@@ -27,7 +28,8 @@ class GitRepoSearchApplication : Application() {
                 listOf(
                     networkModule,
                     moshiModule,
-                    searchModule
+                    searchModule,
+                    databaseModule
                 )
             )
         }
