@@ -1,6 +1,8 @@
 package com.pottymotty.gitreposearch.di
 
 import com.pottymotty.gitreposearch.BuildConfig
+import com.pottymotty.gitreposearch.data.api.NetworkDataSource
+import com.pottymotty.gitreposearch.data.api.NetworkDataSourceImpl
 import com.pottymotty.gitreposearch.data.api.api_services.GithubApiService
 import com.pottymotty.gitreposearch.data.api.call_response.NetworkResponseAdapterFactory
 import com.pottymotty.gitreposearch.data.api.interceptors.DefaultHeadersInterceptor
@@ -14,10 +16,9 @@ val networkModule = module {
     single {
         DefaultHeadersInterceptor()
     }
-    single{
+    single {
         OkHttpClient.Builder().apply {
-            addInterceptor(
-                HttpLoggingInterceptor().apply {
+            addInterceptor(HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.BODY
             })
             addInterceptor(get<DefaultHeadersInterceptor>())
@@ -26,13 +27,12 @@ val networkModule = module {
     single {
         val moshiConverter: MoshiConverterFactory = get()
         val httpClient: OkHttpClient = get()
-        Retrofit.Builder()
-            .baseUrl(BuildConfig.BASE_API_URL)
+        Retrofit.Builder().baseUrl(BuildConfig.BASE_API_URL)
             .addConverterFactory(
                 moshiConverter
             ).addCallAdapterFactory(
                 NetworkResponseAdapterFactory()
-            ).client(httpClient)
+            ).client(httpClient).build()
     }
     single {
         MoshiConverterFactory.create(get())
@@ -40,5 +40,10 @@ val networkModule = module {
     single {
         val retrofit = get<Retrofit>()
         retrofit.create(GithubApiService::class.java)
+    }
+    single<NetworkDataSource> {
+        NetworkDataSourceImpl(
+            githubApi = get()
+        )
     }
 }
