@@ -1,6 +1,7 @@
 package com.pottymotty.gitreposearch.data.repositories.repo_search
 
 import com.pottymotty.gitreposearch.data.api.NetworkDataSource
+import com.pottymotty.gitreposearch.data.api.call_response.NetworkResponse
 import com.pottymotty.gitreposearch.data.local.dao.SearchResultDao
 import com.pottymotty.gitreposearch.data.local.entities.OwnerEntity
 import com.pottymotty.gitreposearch.data.local.entities.RepositoryEntity
@@ -32,43 +33,39 @@ class RepoSearchRepositoryImpl(
 
 
     override suspend fun fetchSearchResults(query: String) {
-        //val result = networkDataSource.fetchRepositorySearchResults(query)
-        //Timber.d("FETCH_RESULT: $result")
+        val result = networkDataSource.fetchRepositorySearchResults(query)
+        Timber.d("FETCH_RESULT: $result")
         currentSearch.update { query }
-
-        searchResultDao.insertDataFromSearchResult(
-            searchQuery = "tetris",
-            repositories = listOf(
-                RepositoryEntity(
-                    id = 0,
-                    name = "Tetris 1",
-                    fullName = "fullNAme/Tetris 1",
-                    description = "Tatris game",
-                    starsCount = 3,
-                    updatedAt = "time",
-                    repositoryUrl = "url",
-                    forksCount = 10,
-                    createdAt = "time2",
-                    ownerName = "potty"
-                ),
-                RepositoryEntity(
-                    id = 1,
-                    name = "Tetris 2",
-                    fullName = "fullNAme/Tetris 2",
-                    description = "Tatris game",
-                    starsCount = 34,
-                    updatedAt = "time",
-                    repositoryUrl = "url",
-                    forksCount = 103,
-                    createdAt = "time2",
-                    ownerName = "potty"
-                )
-            ),
-            owners = listOf(
+        if(result is NetworkResponse.Success){
+            val owners = result.body.items.map {
+                it.owner
+            }.toSet().map {
                 OwnerEntity(
-                    name = "potty", avatarImageUrl = "image", profileUrl = "url"
+                    name=it.name,
+                    avatarImageUrl = it.avatarImageUrl,
+                    profileUrl = it.profileLink
                 )
+            }
+            val repos = result.body.items.map {
+                RepositoryEntity(
+                    id = it.id,
+                    name = it.name,
+                    fullName = it.fullName,
+                    description = it.description,
+                    starsCount = it.starsCount,
+                    updatedAt = it.lastUpdatedAt.toString(),
+                    repositoryUrl = it.repositoryUrl,
+                    forksCount = it.forksCount,
+                    createdAt = it.createdAt.toString(),
+                    ownerName = it.owner.name
+                )
+            }
+            searchResultDao.insertDataFromSearchResult(
+                searchQuery = query,
+                repositories = repos,
+                owners = owners
             )
-        )
+        }
+
     }
 }

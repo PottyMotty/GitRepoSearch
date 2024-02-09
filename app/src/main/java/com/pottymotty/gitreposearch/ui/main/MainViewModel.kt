@@ -12,7 +12,7 @@ class MainViewModel(private val repoSearchRepository: RepoSearchRepository) : Vi
 
     fun fetchSearch(){
         viewModelScope.launch {
-            repoSearchRepository.fetchSearchResults("tetris")
+            repoSearchRepository.fetchSearchResults("monkey")
         }
     }
 
