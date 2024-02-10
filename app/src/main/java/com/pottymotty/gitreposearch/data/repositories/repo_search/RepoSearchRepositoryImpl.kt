@@ -8,6 +8,11 @@ import com.pottymotty.gitreposearch.data.local.entities.RepositoryEntity
 import com.pottymotty.gitreposearch.data.local.entities.SearchQueryEntity
 import com.pottymotty.gitreposearch.data.local.entities.relations.SearchQueryRepositoryCrossRef
 import com.pottymotty.gitreposearch.data.local.entities.relations.SearchQueryWithRepositoryAndOwner
+import com.pottymotty.gitreposearch.data.local.entities.toEntity
+import com.pottymotty.gitreposearch.data.util.handleResult
+import com.pottymotty.gitreposearch.util.FuncResult
+import com.pottymotty.gitreposearch.util.withoutType
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,7 +22,9 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.withContext
 import timber.log.Timber
+import kotlin.time.measureTimedValue
 
 class RepoSearchRepositoryImpl(
     private val networkDataSource: NetworkDataSource,
@@ -25,47 +32,37 @@ class RepoSearchRepositoryImpl(
 ) : RepoSearchRepository {
 
     private val currentSearch = MutableStateFlow<String?>(null)
+
     @OptIn(ExperimentalCoroutinesApi::class)
-    override val currentSearchResult: Flow<SearchQueryWithRepositoryAndOwner> = currentSearch.filterNotNull().flatMapLatest {
-        searchResultDao.getResultsForQuery(it)
-    }
-
-
-
-    override suspend fun fetchSearchResults(query: String) {
-        val result = networkDataSource.fetchRepositorySearchResults(query)
-        Timber.d("FETCH_RESULT: $result")
-        currentSearch.update { query }
-        if(result is NetworkResponse.Success){
-            val owners = result.body.items.map {
-                it.owner
-            }.toSet().map {
-                OwnerEntity(
-                    name=it.name,
-                    avatarImageUrl = it.avatarImageUrl,
-                    profileUrl = it.profileLink
-                )
-            }
-            val repos = result.body.items.map {
-                RepositoryEntity(
-                    id = it.id,
-                    name = it.name,
-                    fullName = it.fullName,
-                    description = it.description,
-                    starsCount = it.starsCount,
-                    updatedAt = it.lastUpdatedAt.toString(),
-                    repositoryUrl = it.repositoryUrl,
-                    forksCount = it.forksCount,
-                    createdAt = it.createdAt.toString(),
-                    ownerName = it.owner.name
-                )
-            }
-            searchResultDao.insertDataFromSearchResult(
-                searchQuery = query,
-                repositories = repos,
-                owners = owners
-            )
+    override val currentSearchResult: Flow<SearchQueryWithRepositoryAndOwner> =
+        currentSearch.filterNotNull().flatMapLatest {
+            searchResultDao.getResultsForQuery(it)
         }
 
-    }
+    override suspend fun fetchSearchResults(query: String): FuncResult<Unit> =
+        withContext(Dispatchers.IO) {
+            currentSearch.update { query }
+            val result = networkDataSource.fetchRepositorySearchResults(query)
+            result.handleResult(
+                onSuccess = { searchResultDto ->
+                    val owners = searchResultDto.items.map {
+                        it.owner
+                    }.toSet().map {
+                        it.toEntity()
+                    }
+                    val repos = searchResultDto.items.map {
+                        it.toEntity()
+                    }
+                    searchResultDao.deleteOutdatedData(query)
+                    searchResultDao.insertDataFromSearchResult(
+                        searchQuery = query,
+                        repositories = repos,
+                        owners = owners
+                    )
+                }
+            ).withoutType()
+        }
+
+
 }
+

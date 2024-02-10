@@ -1,6 +1,7 @@
 package com.pottymotty.gitreposearch.model
 
 import com.pottymotty.gitreposearch.data.api.dto.RepositoryDto
+import com.pottymotty.gitreposearch.data.local.entities.RepositoryEntity
 import java.time.Instant
 
 data class GithubRepository(
@@ -12,19 +13,5 @@ data class GithubRepository(
     val createdAt: Instant,
     val lastUpdatedAt: Instant,
     val repositoryUrl: String,
-    val owner: RepositoryOwner
 )
 
-fun RepositoryDto.toModel() : GithubRepository =
-    GithubRepository(
-        name = this.name,
-        fullName = this.fullName,
-        description = this.description,
-        starsCount = this.starsCount,
-        forksCount = this.forksCount,
-        createdAt =this.createdAt,
-        lastUpdatedAt =this.lastUpdatedAt,
-        repositoryUrl = this.repositoryUrl,
-        owner = this.owner.toModel()
-
-    )
