@@ -31,17 +31,17 @@ interface SearchResultDao {
 
     @Transaction
     suspend fun insertDataFromSearchResult(
-        searchQuery: String,
+        searchQuery: SearchQueryEntity,
         repositories: List<RepositoryEntity>,
         owners: List<OwnerEntity>
     ) {
-        insertSearchQuery(SearchQueryEntity(searchQuery))
+        insertSearchQuery(searchQuery)
         upsertAllOwners(owners)
         upsertAllRepositories(repositories)
         insertSearchQueryRepositoryCrossRefAll(
             repositories.map {
                 SearchQueryRepositoryCrossRef(
-                    searchQuery = searchQuery,
+                    searchQuery = searchQuery.query,
                     repositoryId = it.id
                 )
             }

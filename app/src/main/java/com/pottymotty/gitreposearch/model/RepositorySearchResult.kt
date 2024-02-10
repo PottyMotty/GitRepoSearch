@@ -4,5 +4,9 @@ import com.pottymotty.gitreposearch.data.api.dto.RepositorySearchResultDto
 
 data class RepositorySearchResult(
     val totalCount: Int,
-    val items: List<GithubRepository>
-)
+    val searchQuery: String,
+    val items: List<GithubRepositoryWithOwner>
+) {
+    val remainingItems
+        get() = totalCount - items.size
+}

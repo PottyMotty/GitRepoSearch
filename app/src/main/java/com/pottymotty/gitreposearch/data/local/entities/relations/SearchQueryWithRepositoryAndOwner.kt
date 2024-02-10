@@ -5,6 +5,7 @@ import androidx.room.Junction
 import androidx.room.Relation
 import com.pottymotty.gitreposearch.data.local.entities.RepositoryEntity
 import com.pottymotty.gitreposearch.data.local.entities.SearchQueryEntity
+import com.pottymotty.gitreposearch.model.GithubRepositoryWithOwner
 
 data class SearchQueryWithRepositoryAndOwner(
     @Embedded val query: SearchQueryEntity,
@@ -16,3 +17,4 @@ data class SearchQueryWithRepositoryAndOwner(
     )
     val repositoriesWithOwner: List<RepositoryWithOwner>
 )
+

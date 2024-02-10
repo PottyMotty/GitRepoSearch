@@ -7,7 +7,7 @@ import java.time.Instant
 data class GithubRepository(
     val name: String,
     val fullName: String,
-    val description: String,
+    val description: String?,
     val starsCount: Int,
     val forksCount: Int,
     val createdAt: Instant,
