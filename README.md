@@ -13,6 +13,10 @@ Used technologies:
 
 A freshly generated release .apk file can be found in the app/release folder
 
+Potential upgrade options:
+- For simplicities sake the app does not contain any kind of localization.
+- Currently there is no mechanism for clearing old cached data from the local db. One could be added as a way to optimize disk space usage.
+
 Demo videos:
 
 
