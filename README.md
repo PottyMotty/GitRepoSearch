@@ -11,6 +11,8 @@ Used technologies:
 - Koin: DI
 - Coil: Image loading
 
+A freshly generated release .apk file can be found in the app/release folder
+
 Demo videos:
 
 
