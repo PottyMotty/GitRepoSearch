@@ -10,4 +10,6 @@ data class SearchQueryEntity(
     val timestamp: String,
     @ColumnInfo(name = "total_result_count")
     val totalResultCount: Int,
+    @ColumnInfo(name="next_key")
+    val nextKey: Int?,
 )

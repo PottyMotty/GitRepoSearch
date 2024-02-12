@@ -19,6 +19,7 @@ internal class NetworkResponseCall<S : Any, E : Any>(
         return delegate.enqueue(object : Callback<S> {
             override fun onResponse(call: Call<S>, response: Response<S>) {
                 val body = response.body()
+                val headers = response.headers()
                 val code = response.code()
                 val error = response.errorBody()
 
@@ -26,7 +27,7 @@ internal class NetworkResponseCall<S : Any, E : Any>(
                     if (body != null) {
                         callback.onResponse(
                             this@NetworkResponseCall,
-                            Response.success(NetworkResponse.Success(body))
+                            Response.success(NetworkResponse.Success(body,headers.toMultimap()))
                         )
                     } else {
                         // Response is successful but the body is null

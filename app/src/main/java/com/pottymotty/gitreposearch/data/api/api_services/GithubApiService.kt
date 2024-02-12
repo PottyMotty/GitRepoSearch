@@ -12,5 +12,7 @@ interface GithubApiService {
     @GET("/search/repositories")
     suspend fun fetchRepositorySearchResult(
         @Query("q") query: String,
+        @Query("page") page: Int,
+        @Query("per_page") pageSize: Int,
         ) : NetworkResponse<RepositorySearchResultDto,String>
 }

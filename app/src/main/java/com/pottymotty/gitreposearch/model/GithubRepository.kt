@@ -5,6 +5,7 @@ import com.pottymotty.gitreposearch.data.local.entities.RepositoryEntity
 import java.time.Instant
 
 data class GithubRepository(
+    val id: Long,
     val name: String,
     val fullName: String,
     val description: String?,

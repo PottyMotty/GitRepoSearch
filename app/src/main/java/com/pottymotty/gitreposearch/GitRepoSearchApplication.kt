@@ -5,6 +5,7 @@ import com.pottymotty.gitreposearch.di.databaseModule
 import com.pottymotty.gitreposearch.di.moshiModule
 import com.pottymotty.gitreposearch.di.networkModule
 import com.pottymotty.gitreposearch.di.searchModule
+import com.pottymotty.gitreposearch.di.uiModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -29,7 +30,8 @@ class GitRepoSearchApplication : Application() {
                     networkModule,
                     moshiModule,
                     searchModule,
-                    databaseModule
+                    databaseModule,
+                    uiModule
                 )
             )
         }

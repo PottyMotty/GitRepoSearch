@@ -1,17 +1,22 @@
 [versions]
 activityCompose = "1.8.2"
 androidGradlePlugin = "8.2.0"
+coil = "2.5.0"
 coreKtx = "1.12.0"
 kotlin = "1.9.22"
 lifecycleRuntimeKtx = "2.7.0"
 androidxComposeBom = "2024.02.00"
-material3 = "1.2.0-rc01"
+androidxLifecycle = "2.7.0"
+material3 = "1.2.0"
+materialMotionComposeCore = "1.1.2"
 retrofit = "2.9.0"
 moshi = "1.15.0"
 koin = "3.5.3"
 okhttp-logger = "4.11.0"
 timber = "5.0.1"
 room = "2.6.1"
+voyager = "1.0.0"
+pager = "3.2.1"
 
 
 [libraries]
@@ -27,6 +32,9 @@ androidx-compose-runtime = { module = "androidx.compose.runtime:runtime" }
 androidx-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 androidx-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 androidx-compose-ui-util = { module = "androidx.compose.ui:ui-util" }
+coil = { module = "io.coil-kt:coil", version.ref = "coil" }
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
+material-motion-compose-core = { module = "io.github.fornewid:material-motion-compose-core", version.ref = "materialMotionComposeCore" }
 retrofit-core = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofit-moshi = { group = "com.squareup.retrofit2", name = "converter-moshi", version.ref = "retrofit" }
 moshi = { group = "com.squareup.moshi", name = "moshi-kotlin", version.ref = "moshi" }
@@ -34,12 +42,18 @@ moshi-adapters = { group = "com.squareup.moshi", name = "moshi-adapters", versio
 moshi-codegen = { group = "com.squareup.moshi", name = "moshi-kotlin-codegen", version.ref = "moshi" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 koin-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin" }
-okhttp-logging = {module =  "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp-logger" }
+okhttp-logging = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp-logger" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
-room = {module = "androidx.room:room-runtime", version.ref = "room"}
-room-compiler = {module = "androidx.room:room-compiler", version.ref = "room"}
-room-extensions = {module = "androidx.room:room-ktx", version.ref ="room"}
-
+room = { module = "androidx.room:room-runtime", version.ref = "room" }
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+room-extensions = { module = "androidx.room:room-ktx", version.ref = "room" }
+room-paging = { module = "androidx.room:room-paging", version.ref = "room" }
+voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
+voyager-transitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyager" }
+androidx-lifecycle-runtimeCompose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidxLifecycle" }
+pager-common = { module = "androidx.paging:paging-common", version.ref = "pager" }
+pager-runtime = { module = "androidx.paging:paging-runtime-ktx", version.ref = "pager" }
+pager-compose = { module = "androidx.paging:paging-compose", version.ref = "pager" }
 
 
 [bundles]
@@ -52,7 +66,8 @@ compose = [
     "androidx-compose-runtime",
     "androidx-compose-ui-tooling",
     "androidx-compose-ui-tooling-preview",
-    "androidx-compose-ui-util"
+    "androidx-compose-ui-util",
+    "androidx-lifecycle-runtimeCompose"
 ]
 network = [
     "retrofit.core",
@@ -66,6 +81,15 @@ moshi = [
 koin = [
     "koin-android",
     "koin-compose"
+]
+voyager = [
+    "voyager-transitions",
+    "voyager-navigator"
+]
+pager = [
+    "pager-common",
+    "pager-compose",
+    "pager-runtime"
 ]
 
 [plugins]

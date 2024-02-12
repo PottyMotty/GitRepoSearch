@@ -6,7 +6,7 @@ sealed class NetworkResponse<out T : Any, out U : Any> {
     /**
      * Success response with body
      */
-    data class Success<T : Any>(val body: T) : NetworkResponse<T, Nothing>()
+    data class Success<T : Any>(val body: T, val headers: Map<String,List<String>>) : NetworkResponse<T, Nothing>()
 
     /**
      * Failure response with body

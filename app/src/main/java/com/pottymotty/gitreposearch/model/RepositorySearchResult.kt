@@ -7,6 +7,6 @@ data class RepositorySearchResult(
     val searchQuery: String,
     val items: List<GithubRepositoryWithOwner>
 ) {
-    val remainingItems
+    val remainingItemsCount
         get() = totalCount - items.size
 }

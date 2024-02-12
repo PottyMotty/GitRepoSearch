@@ -1,14 +1,18 @@
 package com.pottymotty.gitreposearch.data.repositories.repo_search
 
-import com.pottymotty.gitreposearch.data.local.entities.relations.SearchQueryWithRepositoryAndOwner
+import androidx.paging.PagingData
+import com.pottymotty.gitreposearch.data.local.entities.relations.RepositoryWithOwner
 import com.pottymotty.gitreposearch.model.GithubRepositoryWithOwner
-import com.pottymotty.gitreposearch.model.RepositorySearchResult
 import com.pottymotty.gitreposearch.util.FuncResult
 import kotlinx.coroutines.flow.Flow
 
 interface RepoSearchRepository {
+    fun getPaginatedSearchResult(
+        query: String,
+        pageSize: Int,
+        prefetchDistance: Int
+    ): Flow<PagingData<RepositoryWithOwner>>
 
-    val currentSearchResult :  Flow<RepositorySearchResult>
-    suspend fun fetchSearchResults(query: String) : FuncResult<Unit>
 
+    fun getDetailItemForRepository(id:Long) : Flow<GithubRepositoryWithOwner>
 }

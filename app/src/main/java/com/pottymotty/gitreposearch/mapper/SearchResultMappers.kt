@@ -3,7 +3,6 @@ package com.pottymotty.gitreposearch.mapper
 import com.pottymotty.gitreposearch.data.local.entities.OwnerEntity
 import com.pottymotty.gitreposearch.data.local.entities.RepositoryEntity
 import com.pottymotty.gitreposearch.data.local.entities.relations.RepositoryWithOwner
-import com.pottymotty.gitreposearch.data.local.entities.relations.SearchQueryWithRepositoryAndOwner
 import com.pottymotty.gitreposearch.model.GithubRepository
 import com.pottymotty.gitreposearch.model.GithubRepositoryWithOwner
 import com.pottymotty.gitreposearch.model.RepositoryOwner
@@ -16,9 +15,6 @@ fun RepositoryWithOwner.toModel() : GithubRepositoryWithOwner {
     )
 }
 
-fun SearchQueryWithRepositoryAndOwner.toModel() : List<GithubRepositoryWithOwner>{
-    return this.repositoriesWithOwner.map { it.toModel() }
-}
 
 fun OwnerEntity.toModel() : RepositoryOwner  =
     RepositoryOwner(
@@ -29,6 +25,7 @@ fun OwnerEntity.toModel() : RepositoryOwner  =
 
 fun RepositoryEntity.toModel() : GithubRepository  =
     GithubRepository(
+        id = this.id,
         name = this.name,
         fullName = this.fullName,
         description = this.description,

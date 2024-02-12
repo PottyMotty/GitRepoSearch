@@ -1,7 +1,7 @@
 package com.pottymotty.gitreposearch.data.local.dao
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy.Companion.REPLACE
 import androidx.room.Query
@@ -10,10 +10,9 @@ import androidx.room.Upsert
 import com.pottymotty.gitreposearch.data.local.entities.OwnerEntity
 import com.pottymotty.gitreposearch.data.local.entities.RepositoryEntity
 import com.pottymotty.gitreposearch.data.local.entities.SearchQueryEntity
+import com.pottymotty.gitreposearch.data.local.entities.relations.RepositoryWithOwner
 import com.pottymotty.gitreposearch.data.local.entities.relations.SearchQueryRepositoryCrossRef
-import com.pottymotty.gitreposearch.data.local.entities.relations.SearchQueryWithRepositoryAndOwner
 import kotlinx.coroutines.flow.Flow
-import timber.log.Timber
 
 @Dao
 interface SearchResultDao {
@@ -83,7 +82,7 @@ interface SearchResultDao {
     suspend fun getDeletableOwners(deletableRepos: List<Long>): List<String>
 
     @Transaction
-    suspend fun deleteOutdatedData(searchQuery: String) {
+    suspend fun deleteQueryData(searchQuery: String) {
         val getRepos = getDeletableRepos(searchQuery)
         val getOwners = getDeletableOwners(getRepos)
         deleteOwners(getOwners)
@@ -92,8 +91,22 @@ interface SearchResultDao {
         deleteQuery(searchQuery)
     }
 
+    @Query("SELECT next_key FROM search_query WHERE `query` = :searchQuery")
+    suspend fun getQueryNextKey(searchQuery: String): Int?
+
     @Transaction
-    @Query("SELECT * FROM search_query WHERE `query`= :searchQuery")
-    fun getResultsForQuery(searchQuery: String): Flow<SearchQueryWithRepositoryAndOwner>
+    @Query("""
+        SELECT repository.*
+        FROM repositories repository
+        JOIN search_query_and_repo_cross_ref query_repository ON repository.repository_id = query_repository.repository_id
+        WHERE query_repository.`query` = :searchQuery
+        ORDER BY query_repository.id ASC
+    """)
+    fun getResultsForQuery(searchQuery: String): PagingSource<Int, RepositoryWithOwner>
+
+
+    @Query("SELECT * FROM repositories WHERE repository_id = :repositoryId")
+    fun getRepository(repositoryId: Long) : Flow<RepositoryWithOwner>
+
 }
 

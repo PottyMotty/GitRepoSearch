@@ -33,6 +33,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("debug")
         }
 
     }
@@ -68,7 +69,13 @@ dependencies {
     implementation(libs.bundles.koin)
     implementation(libs.timber)
     implementation(libs.room)
+    implementation(libs.room.paging)
     implementation(libs.room.extensions)
+    implementation(libs.bundles.voyager)
+    implementation(libs.bundles.pager)
+    implementation(libs.coil.compose)
+    implementation(libs.coil)
+
     ksp(libs.moshi.codegen)
     ksp(libs.room.compiler)
 }

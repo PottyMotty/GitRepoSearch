@@ -7,5 +7,5 @@ import com.squareup.moshi.JsonClass
 data class OwnerDto(
     @Json(name="login")val name: String,
     @Json(name="avatar_url")val avatarImageUrl: String,
-    @Json(name="url")val profileLink: String,
+    @Json(name="html_url")val profileLink: String,
 )
